@@ -3,18 +3,21 @@
 	import TodoItem from "./components/TodoItem.svelte";
 
 	let currentItem = '';
-	let todoList = [];
+	const preList = JSON.parse(localStorage.getItem('svelte-todo-list'));
+	let todoList = isEmpty(preList) ? [] : preList;
 	function addToList(e){
 		e.preventDefault();
 		if(!isEmpty(currentItem)) {
 			todoList = [currentItem, ...todoList];
 			currentItem = '';
+			localStorage.setItem("svelte-todo-list", JSON.stringify(todoList));
 		}
 	
 	}
 	function removeFromList(item){
 		const updatedList = todoList.filter(i => { return i.toUpperCase() != item.toUpperCase()});
 		todoList = [...updatedList];
+		localStorage.setItem("svelte-todo-list", JSON.stringify(updatedList));
 	}
 	$: todoListRenderer = todoList;
 	$: count = todoListRenderer.length;
